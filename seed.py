@@ -8,8 +8,14 @@ def insert_user(connection, fullname, email):
 
 
 def insert_status(connection, name):
-    query = "INSERT INTO status (name) VALUES (?)"
-    connection.execute(query, (name,))
+    query = "SELECT id FROM status WHERE name = ?"
+    existing_status = connection.execute(query, (name,)).fetchone()
+
+    if existing_status is None:  
+        query = "INSERT INTO status (name) VALUES (?)"
+        connection.execute(query, (name,))
+    else:
+        print(f"Status '{name}' already exists.")
 
 
 def insert_task(connection, title, description, status_id, user_id):
@@ -21,14 +27,14 @@ def insert_task(connection, title, description, status_id, user_id):
 
 
 def seed_data(connection):
-    statuses = ["Pending", "In Progress", "Completed"]
+    statuses = ["pending", "in_progress", "completed"]
     for status in statuses:
         insert_status(connection, status)
 
     users = []
     for _ in range(10):  
         fullname = fake.name()
-        email = fake.unique.email()
+        email = fake.unique.free_email()
         users.append((fullname, email))
         insert_user(connection, fullname, email)
 

@@ -13,9 +13,12 @@ def create_connection(db_file):
             print(f"Directory created: {db_dir}")
 
         conn = sqlite3.connect(db_file)
+        conn.execute("PRAGMA foreign_keys = ON;")
+        conn.commit()
         print(f"Connected to database: {db_file}")
 
         yield conn
+
         conn.rollback()
         conn.close()
         print("Connection closed.")
@@ -23,4 +26,3 @@ def create_connection(db_file):
     except sqlite3.Error as e:
         print(f"Error connecting to database: {e}")
         yield None
-
