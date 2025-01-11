@@ -4,6 +4,7 @@ CREATE TABLE tasks (
     description TEXT,
     status_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
-    FOREIGN KEY (status_id) REFERENCES status(id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (status_id) REFERENCES status (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
+    ON DELETE CASCADE
 );
